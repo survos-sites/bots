@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Agent\ChatAgent;
+use App\Agent\SummarizeAgent;
 use App\Agent\SummaryAgent;
 use Inspector\Inspector;
 use NeuronAI\Chat\Messages\UserMessage;
@@ -21,8 +22,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 class SummarizeCommand
 {
 	public function __construct(
-        private SummaryAgent $agent,
-        private CacheInterface $cache,
+        private SummarizeAgent $agent,
     )
 	{
 	}
@@ -30,18 +30,9 @@ class SummarizeCommand
 	public function __invoke(
 		SymfonyStyle $io,
 		#[Argument('initial message')]
-		?string $msg=null,
+		?string $msg="who are you and what are your skills?",
 	): int
 	{
-
-        $url = 'https://dummyjson.com/products';
-        $key = md5($url);
-        $products = $this->cache->get($key, fn(CacheItem $item) => json_decode(file_get_contents($url)));
-        foreach ($products->products as $product) {
-            $description = $product->description;
-            $documents = StringDataLoader::for($description)->getDocuments();
-        }
-        $this->agent->embeddings()->embedDocuments($documents);
 
         $agent = $this->agent;
         $io->writeln($agent->instructions());

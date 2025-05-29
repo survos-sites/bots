@@ -35,10 +35,12 @@ class RappAgent extends RAG
         );
     }
 
-    protected function xvectorStore(): VectorStoreInterface
+    public function embeddings(): EmbeddingsProviderInterface
     {
-//        return new MemoryVectorStore();
-        return new Ollama($this->meiliHost);
+        return new OpenAIEmbeddingsProvider(
+            key: $this->openApiKey, model: 'text-embedding-3-small'
+        );
+//        return new OllamaEmbeddingsProvider(model: 'all-minilm');
     }
 
     protected function vectorStore(): VectorStoreInterface
@@ -69,13 +71,6 @@ class RappAgent extends RAG
     {
         return new OpenAIEmbeddingsProvider(
             key: $this->openApiKey, model: 'text-embedding-3-small'
-        );
-    }
-
-    public function embeddings(): EmbeddingsProviderInterface
-    {
-        return new OllamaEmbeddingsProvider(
-            model: 'all-minilm'
         );
     }
 

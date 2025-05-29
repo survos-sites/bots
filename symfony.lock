@@ -35,6 +35,18 @@
             "migrations/.gitignore"
         ]
     },
+    "inspector-apm/inspector-symfony": {
+        "version": "1.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.4",
+            "ref": "60ac12d92b25c43830fdf25922e53467058feab1"
+        },
+        "files": [
+            "config/packages/inspector.yaml"
+        ]
+    },
     "phpunit/phpunit": {
         "version": "12.1",
         "recipe": {
@@ -49,6 +61,9 @@
             "tests/bootstrap.php",
             "bin/phpunit"
         ]
+    },
+    "survos/code-bundle": {
+        "version": "dev-main"
     },
     "symfony/asset-mapper": {
         "version": "7.3",
