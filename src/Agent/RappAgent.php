@@ -45,7 +45,7 @@ class RappAgent extends RAG
 
     protected function vectorStore(): VectorStoreInterface
     {
-        return new MeilisearchVectorStore(
+            return new MeilisearchVectorStore(
             key: '',
             indexUid: 'aa_vector_products',
         // host: 'http://localhost:7700'

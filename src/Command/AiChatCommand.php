@@ -13,8 +13,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use NeuronAI\Observability\AgentMonitoring;
 
-#[AsCommand('ai:hello', 'Say hello to a chat bot')]
-class AiHelloCommand
+#[AsCommand('ai:chat', 'Basic chat bot')]
+class AiChatCommand
 {
 	public function __construct(
         private ChatAgent $chatAgent,
@@ -26,7 +26,7 @@ class AiHelloCommand
 	public function __invoke(
 		SymfonyStyle $io,
 		#[Argument('initial message')]
-		?string $msg=null,
+        ?string $msg="who are you and what are your skills?",
 	): int
 	{
         $io->writeln($this->inspector::class);
