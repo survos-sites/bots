@@ -4,7 +4,6 @@ namespace App\Command;
 
 use App\Agent\ChatAgent;
 use App\Agent\RappAgent;
-use App\Agent\SummaryAgent;
 use Inspector\Inspector;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\RAG\DataLoader\StringDataLoader;
@@ -27,6 +26,7 @@ class RappCommand
         private RappAgent $agent,
         private CacheInterface $cache,
         private Environment $twig,
+        private Inspector $inspector,
     )
 	{
 	}
@@ -60,7 +60,9 @@ class RappCommand
                 $text = $template->render((array)$data);
                 $documents = StringDataLoader::for($text)->getDocuments();
                 $io->writeln($data->Date . '/' . $data->Title);
+                $documents = StringDataLoader::for($text)->getDocuments();
                 $this->agent->embeddings()->embedDocuments($documents);
+                $this->agent->vectorStore()->addDocuments($documents);
                 if ($total++ > $limit) {
                     break;
                 }
@@ -70,6 +72,7 @@ class RappCommand
         }
 
         $agent = $this->agent;
+        $agent->observe(new AgentMonitoring($this->inspector));
         $io->writeln($agent->instructions());
         do {
             $message = new UserMessage($msg);

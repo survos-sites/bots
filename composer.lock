@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f7f4b941a48bbb5e101b64bbbc926bb8",
+    "content-hash": "9d96ead078c0d963ce875f9d1807ba89",
     "packages": [
         {
             "name": "composer/semver",
@@ -1796,12 +1796,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/inspector-apm/neuron-ai.git",
-                "reference": "ee41c3efda6b562efe834a2d2a579a004add0c6d"
+                "reference": "aa5b07fcb7c73285028f34cac1cb93aadbd4a92e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/inspector-apm/neuron-ai/zipball/ee41c3efda6b562efe834a2d2a579a004add0c6d",
-                "reference": "ee41c3efda6b562efe834a2d2a579a004add0c6d",
+                "url": "https://api.github.com/repos/inspector-apm/neuron-ai/zipball/aa5b07fcb7c73285028f34cac1cb93aadbd4a92e",
+                "reference": "aa5b07fcb7c73285028f34cac1cb93aadbd4a92e",
                 "shasum": ""
             },
             "require": {
@@ -1859,9 +1859,9 @@
             "description": "PHP AI Framework with built-in observability.",
             "support": {
                 "issues": "https://github.com/inspector-apm/neuron-ai/issues",
-                "source": "https://github.com/inspector-apm/neuron-ai/tree/1.10.12"
+                "source": "https://github.com/inspector-apm/neuron-ai/tree/1.10.15"
             },
-            "time": "2025-05-29T16:36:41+00:00"
+            "time": "2025-05-30T16:50:25+00:00"
         },
         {
             "name": "league/commonmark",

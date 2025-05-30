@@ -2,6 +2,7 @@
 
 namespace App\Agent;
 
+use Inspector\Inspector;
 use NeuronAI\Agent;
 use NeuronAI\Chat\Messages\ToolCallMessage;
 use NeuronAI\Providers\AIProviderInterface;
@@ -24,6 +25,7 @@ class RappAgent extends RAG
     public function __construct(
         #[Autowire('%env(OPENAI_API_KEY)%')] private string $openApiKey,
         #[Autowire('%env(MEILI_SERVER)%')] private string $meiliHost,
+        #[Autowire('%env(MEILI_API_KEY)%')] private ?string $meilikey=null,
     )
     {
     }
@@ -43,12 +45,12 @@ class RappAgent extends RAG
 //        return new OllamaEmbeddingsProvider(model: 'all-minilm');
     }
 
-    protected function vectorStore(): VectorStoreInterface
+    public function vectorStore(): VectorStoreInterface
     {
             return new MeilisearchVectorStore(
-            key: '',
+            key: $this->meilikey,
             indexUid: 'aa_vector_products',
-            host: 'http://127.0.0.1:7700'
+            host: $this->meiliHost,
         );
     }
     public function getSystemPrompt(): SystemPrompt
