@@ -29,37 +29,39 @@ class AiChatCommand
 		SymfonyStyle $io,
 		#[Argument('initial message')]
         ?string $msg="who are you and what are your skills?",
+        #[Option('test structured message')] ?bool $structured=null
 	): int
 	{
-        $io->writeln($this->inspector::class);
-
         $agent = $this->chatAgent;
-        $structuredMessage = new UserMessage("I'm John and I like pizza!");
+        if ($structured) {
+            $structuredMessage = new UserMessage("I'm John and I like pizza!");
 
-        $response = $agent->chat($structuredMessage);
-        $io->writeln(json_encode($response));
+            $response = $agent->chat($structuredMessage);
+            $io->writeln(json_encode($response));
 
-        // Talk to the agent requiring the structured output
-        try {
-            $person = $agent
-                ->structured(
-                    $structuredMessage,
-                    Person::class
-                );
-            dump($person);
-        } catch (AgentException $exception) {
-            $io->error($exception->getMessage());
-            $io->writeln(":-(");
-            return Command::FAILURE;
+            // Talk to the agent requiring the structured output
+            try {
+                $person = $agent
+                    ->structured(
+                        $structuredMessage,
+                        Person::class
+                    );
+                dump($person);
+            } catch (AgentException $exception) {
+                $io->error($exception->getMessage());
+                $io->writeln(":-(");
+                return Command::FAILURE;
+            }
         }
-
 
         $io->writeln($agent->instructions());
         do {
             $message = new UserMessage($msg);
-            $response = $agent->chat($message);
+            $stream = $agent->stream($message);
+            // Print the response chunk-by-chunk in real-time
+            $io->write($stream);
 //            dump($response->getUsage());
-            $msg = $io->ask($response->getContent());
+            $msg = $io->ask('You');
         } while ($msg);
         return Command::SUCCESS;
 	}
