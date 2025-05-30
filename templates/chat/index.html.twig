@@ -1,0 +1,35 @@
+{#{% extends "base.html.twig" %}#}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ChatGPT Interface</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    {{ importmap('app') }}
+</head>
+<body>
+<nav class="container-fluid">
+    <ul>
+        <li><strong>Chad</strong>-{{ agentCode }}</li>
+    </ul>
+    <ul>
+        {% for agent in agents %}
+            <li><a href="{{ path('chat_index', {agentCode: agent}) }}">{{ agent }}</a></li>
+        {% endfor %}
+{#        <li><a href="#" role="button" class="secondary">Login</a></li>#}
+    </ul>
+</nav>
+<main class="container-fluid">
+    {{ agent.instructions|markdown_to_html }}
+    {% set _sc = 'chat' %}
+    <div {{ stimulus_controller(_sc, { agent: agentCode}) }}>
+        <div data-chat-target="messages" style="height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem;"></div>
+        <form data-chat-target="form" data-action="submit->chat#send">
+            <input type="text" data-chat-target="input" placeholder="Type your message..." required>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>
