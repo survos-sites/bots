@@ -48,7 +48,7 @@ class RappAgent extends RAG
             return new MeilisearchVectorStore(
             key: '',
             indexUid: 'aa_vector_products',
-        // host: 'http://localhost:7700'
+            host: 'http://127.0.0.1:7700'
         );
     }
     public function getSystemPrompt(): SystemPrompt

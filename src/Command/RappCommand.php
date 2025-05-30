@@ -36,12 +36,14 @@ class RappCommand
 
 		#[Argument('initial message')]
 		?string $msg="who are you and what are your skills?",
-        #[Option('embed the documents')] ?bool $embed=null
+        #[Option('embed the documents')] ?bool $embed=null,
+        #[Option('limit the total')] int $limit = 10,
 
     ): int
 	{
 
         if ($embed) {
+            $total = 0;
             for ($i=1; $i<=1; $i++) {
 
             $url = 'https://ff.survos.com/api/articles?page=' . $i;
@@ -59,6 +61,9 @@ class RappCommand
                 $documents = StringDataLoader::for($text)->getDocuments();
                 $io->writeln($data->Date . '/' . $data->Title);
                 $this->agent->embeddings()->embedDocuments($documents);
+                if ($total++ > $limit) {
+                    break;
+                }
             }
             $progressBar->finish();
             }
