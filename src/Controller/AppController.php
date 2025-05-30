@@ -12,8 +12,7 @@ final class AppController extends AbstractController
     public function index(): Response
     {
         return $this->render('app/index.html.twig', [
-            'agents' => ChatController::AGENTS,
-            'controller_name' => 'AppController',
+            'agents' => ChatController::AGENTS
         ]);
     }
 }

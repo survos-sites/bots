@@ -3,8 +3,10 @@
 namespace App\Command;
 
 use App\Agent\ChatAgent;
+use App\Dto\Person;
 use Inspector\Inspector;
 use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\Exceptions\AgentException;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
@@ -30,7 +32,28 @@ class AiChatCommand
 	): int
 	{
         $io->writeln($this->inspector::class);
+
         $agent = $this->chatAgent;
+        $structuredMessage = new UserMessage("I'm John and I like pizza!");
+
+        $response = $agent->chat($structuredMessage);
+        $io->writeln(json_encode($response));
+
+        // Talk to the agent requiring the structured output
+        try {
+            $person = $agent
+                ->structured(
+                    $structuredMessage,
+                    Person::class
+                );
+            dump($person);
+        } catch (AgentException $exception) {
+            $io->error($exception->getMessage());
+            $io->writeln(":-(");
+            return Command::FAILURE;
+        }
+
+
         $io->writeln($agent->instructions());
         do {
             $message = new UserMessage($msg);

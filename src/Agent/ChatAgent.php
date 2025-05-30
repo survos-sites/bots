@@ -52,6 +52,7 @@ class ChatAgent extends Agent
 
     protected function tools(): array
     {
+        return [];
         return [
             Tool::make(
                 'finish_code',

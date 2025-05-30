@@ -2,6 +2,7 @@
 
 namespace App\Agent;
 
+use App\Dto\UrlAction;
 use NeuronAI\Agent;
 use NeuronAI\Chat\Messages\ToolCallMessage;
 use NeuronAI\Providers\AIProviderInterface;
@@ -22,6 +23,11 @@ class SummarizeAgent extends Agent
         private CacheInterface $cache,
     )
     {
+    }
+
+    protected function getOutputClass(): string
+    {
+        return UrlAction::class;
     }
 
     protected function provider(): AIProviderInterface

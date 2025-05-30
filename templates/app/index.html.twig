@@ -3,18 +3,15 @@
 {% block title %}Hello AppController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Welcome to Chat Bots✅</h1>
+
+    <div>
+        This is a playground for Symfony applications built on <a href="https://github.com/inspector-apm/neuron-ai" target="_blank">Neuron AI</a>.
+
+    </div>
 
     Select an agent and personality!
-
-
-    This friendly message is coming from:
     <ul>
         {% for agent in agents   %}
             <li><a href="{{ path('chat_index', {agentCode: agent}) }}">{{ agent }}</a></li>

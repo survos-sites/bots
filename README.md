@@ -16,4 +16,16 @@ bin/console ai:rapp --embed
 
 Embed is slow, it makes calls to the OpenAI Embed.
 
+```bash
+bin/console ai:chat
+```
+
+# RAG
+
+Load some local news stories or products
+
+```bash
+bin/console ai:products --embed
+bin/console ai:rapp --embed
+```
 

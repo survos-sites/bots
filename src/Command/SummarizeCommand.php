@@ -38,6 +38,12 @@ class SummarizeCommand
         $io->writeln($agent->instructions());
         do {
             $message = new UserMessage($msg);
+            try {
+                $urlAction =$agent->structured($message);
+                dump($urlAction);
+            } catch (\Exception $exception) {
+                $io->warning("not a structured message: " . $msg);
+            }
 
             $response = $agent->chat($message);
 //            dump($response->getUsage());
