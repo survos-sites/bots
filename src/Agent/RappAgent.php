@@ -27,7 +27,7 @@ class RappAgent extends RAG
         #[Autowire('%env(OPENAI_API_KEY)%')] private string $openApiKey,
         #[Autowire('%env(MEILI_SERVER)%')] private string $meiliHost,
         #[Autowire('%env(MEILI_API_KEY)%')] private ?string $meilikey=null,
-        #[Autowire('%env(VOYAGE_API_KEY)%')] private ?string $voyageKey=null,
+//        #[Autowire('%env(VOYAGE_API_KEY)%')] private ?string $voyageKey=null,
     )
     {
     }
@@ -39,21 +39,21 @@ class RappAgent extends RAG
         );
     }
 
-//    public function embeddings(): EmbeddingsProviderInterface
-//    {
-//        return new OpenAIEmbeddingsProvider(
-//            key: $this->openApiKey, model: 'text-embedding-3-small'
-//        );
-////        return new OllamaEmbeddingsProvider(model: 'all-minilm');
-//    }
-
     public function embeddings(): EmbeddingsProviderInterface
     {
-        return new VoyageEmbeddingsProvider(
-            key: $this->voyageKey,
-            model: 'voyage-3'
+        return new OpenAIEmbeddingsProvider(
+            key: $this->openApiKey, model: 'text-embedding-3-small'
         );
+//        return new OllamaEmbeddingsProvider(model: 'all-minilm');
     }
+
+//    public function embeddings(): EmbeddingsProviderInterface
+//    {
+//        return new VoyageEmbeddingsProvider(
+//            key: $this->voyageKey,
+//            model: 'voyage-3'
+//        );
+//    }
 
     public function vectorStore(): VectorStoreInterface
     {

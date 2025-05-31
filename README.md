@@ -11,7 +11,7 @@ Install Meilisearch
 
 ```bash
 echo "OPENAI_API_KEY='sk-...'" > .env.local
-bin/console ai:rapp --embed
+bin/console ai:rapp --embed limit=2 "test"
 ```
 
 Embed is slow, it makes calls to the OpenAI Embed.
