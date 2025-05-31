@@ -6,8 +6,10 @@ use App\Agent\ChatAgent;
 use App\Agent\ProductAgent;
 use App\Agent\RappAgent;
 use App\Agent\SummarizeAgent;
+use Inspector\Inspector;
 use NeuronAI\Agent;
 use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\Observability\AgentMonitoring;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/chat')]
 class ChatController extends AbstractController
 {
     const AGENTS = ['chat', 'rapp', 'product', 'summarize'];
@@ -23,18 +26,21 @@ class ChatController extends AbstractController
         private RappAgent $rappAgent,
         private ProductAgent $productAgent,
         private SummarizeAgent $summarizeAgent,
+        private Inspector $inspector
     ) {
 
     }
 
     private function getAgent(string $agentCode): Agent
     {
-        return match ($agentCode) {
+        $agent = match ($agentCode) {
             'chat' => $this->chatAgent,
             'rapp' => $this->rappAgent,
             'product' => $this->productAgent,
             'summarize' => $this->summarizeAgent,
         };
+        $agent->observe(new AgentMonitoring($this->inspector));
+        return $agent;
     }
 
     #[Route('/{agentCode}', name: 'chat_index')]

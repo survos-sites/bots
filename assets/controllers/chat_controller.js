@@ -13,7 +13,7 @@ export default class extends Controller {
     this.addMessage("You", message)
 
     this.inputTarget.value = "--thinking--";
-    const response = await fetch("/api/chat/" + this.agentValue, {
+    const response = await fetch("/chat/api/chat/" + this.agentValue, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message }),

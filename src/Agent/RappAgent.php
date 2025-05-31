@@ -11,6 +11,7 @@ use NeuronAI\Providers\OpenAI\OpenAI;
 use NeuronAI\RAG\Embeddings\EmbeddingsProviderInterface;
 use NeuronAI\RAG\Embeddings\OllamaEmbeddingsProvider;
 use NeuronAI\RAG\Embeddings\OpenAIEmbeddingsProvider;
+use NeuronAI\RAG\Embeddings\VoyageEmbeddingsProvider;
 use NeuronAI\RAG\RAG;
 use NeuronAI\RAG\VectorStore\MemoryVectorStore;
 use NeuronAI\RAG\VectorStore\VectorStoreInterface;
@@ -26,6 +27,7 @@ class RappAgent extends RAG
         #[Autowire('%env(OPENAI_API_KEY)%')] private string $openApiKey,
         #[Autowire('%env(MEILI_SERVER)%')] private string $meiliHost,
         #[Autowire('%env(MEILI_API_KEY)%')] private ?string $meilikey=null,
+        #[Autowire('%env(VOYAGE_API_KEY)%')] private ?string $voyageKey=null,
     )
     {
     }
@@ -37,12 +39,20 @@ class RappAgent extends RAG
         );
     }
 
+//    public function embeddings(): EmbeddingsProviderInterface
+//    {
+//        return new OpenAIEmbeddingsProvider(
+//            key: $this->openApiKey, model: 'text-embedding-3-small'
+//        );
+////        return new OllamaEmbeddingsProvider(model: 'all-minilm');
+//    }
+
     public function embeddings(): EmbeddingsProviderInterface
     {
-        return new OpenAIEmbeddingsProvider(
-            key: $this->openApiKey, model: 'text-embedding-3-small'
+        return new VoyageEmbeddingsProvider(
+            key: $this->voyageKey,
+            model: 'voyage-3'
         );
-//        return new OllamaEmbeddingsProvider(model: 'all-minilm');
     }
 
     public function vectorStore(): VectorStoreInterface

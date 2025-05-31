@@ -17,5 +17,13 @@
             <li><a href="{{ path('chat_index', {agentCode: agent}) }}">{{ agent }}</a></li>
         {% endfor %}
     </ul>
+
+    <div data-controller="stream">
+        <div data-stream-target="output" style="height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 1rem;"></div>
+        <div data-stream-target="loader" style="margin-top: 0.5rem;">Loading…</div>
+    </div>
+
+
+
 </div>
 {% endblock %}

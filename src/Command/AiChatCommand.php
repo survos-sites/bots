@@ -59,7 +59,10 @@ class AiChatCommand
             $message = new UserMessage($msg);
             $stream = $agent->stream($message);
             // Print the response chunk-by-chunk in real-time
-            $io->write($stream);
+            foreach ($stream as $idx => $message) {
+                dump($idx, $message);
+            }
+//            $io->write($stream);
 //            dump($response->getUsage());
             $msg = $io->ask('You');
         } while ($msg);

@@ -59,10 +59,17 @@ class RappCommand
                 $progressBar->advance();
                 $text = $template->render((array)$data);
                 $documents = StringDataLoader::for($text)->getDocuments();
+                foreach ($documents as $document) {
+//                    dd($document);
+                }
+                $this->agent->addDocuments($documents);
+                foreach ($documents as $document) {
+                    $io->writeln(substr($document->content, 0, 100));
+                }
                 $io->writeln($data->Date . '/' . $data->Title);
-                $documents = StringDataLoader::for($text)->getDocuments();
-                $this->agent->embeddings()->embedDocuments($documents);
-                $this->agent->vectorStore()->addDocuments($documents);
+//                $embedded = $this->agent->embeddings()->embedDocuments($documents);
+//                $this->agent->vectorStore()->addDocuments($embedded);
+//                $this->agent->vectorStore()->addDocuments($documents);
                 if ($total++ > $limit) {
                     break;
                 }
@@ -76,8 +83,11 @@ class RappCommand
         $io->writeln($agent->instructions());
         do {
             $message = new UserMessage($msg);
-            $response = $agent->chat($message);
+            $response = $agent->answer($message);
+//            $response = $agent->chat($message);
             $msg = $io->ask($response->getContent());
+            dump($this->inspector->transaction());
+            $this->inspector->flush();
         } while ($msg);
 
         return Command::SUCCESS;
