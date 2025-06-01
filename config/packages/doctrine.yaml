@@ -8,6 +8,10 @@ doctrine:
 
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
+        types:
+            vector: NeuronAI\RAG\VectorStore\Doctrine\VectorType
+#
+
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
@@ -24,6 +28,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+            NeuronAI:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/vendor/inspector-apm/neuron-ai/src/RAG/VectorStore/Doctrine'
+                prefix: 'NeuronAI\RAG\VectorStore\Doctrine'
+
         controller_resolver:
             auto_mapping: false
 

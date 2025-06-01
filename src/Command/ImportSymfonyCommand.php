@@ -30,6 +30,7 @@ class ImportSymfonyCommand
 		int $limit = 50,
 	): int
 	{
+        $io->warning('The entityManager MUST point to a vector-enabled postgres database');
         if (!file_exists($zipPath)) {
             $io->warning('Downloading ...');
             file_put_contents($zipPath, file_get_contents('https://github.com/symfony/symfony-docs/archive/refs/heads/7.3.zip'));
