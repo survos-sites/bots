@@ -37,6 +37,7 @@ class RappCommand
 		#[Argument('initial message')]
 		?string $msg="who are you and what are your skills?",
         #[Option('embed the documents')] ?bool $embed=null,
+        #[Option('chat (instead of answer)')] ?bool $chat=null,
         #[Option('limit the total')] int $limit = 10,
 
     ): int
@@ -59,9 +60,6 @@ class RappCommand
                 $progressBar->advance();
                 $text = $template->render((array)$data);
                 $documents = StringDataLoader::for($text)->getDocuments();
-                foreach ($documents as $document) {
-//                    dd($document);
-                }
                 $this->agent->addDocuments($documents);
                 foreach ($documents as $document) {
                     $io->writeln(substr($document->content, 0, 100));
@@ -83,10 +81,11 @@ class RappCommand
         $io->writeln($agent->instructions());
         do {
             $message = new UserMessage($msg);
+//            $io->title("Chatting");
+//            $io->writeln($agent->chat($message)->getContent());
+            $io->title("Answering");
             $response = $agent->answer($message);
-//            $response = $agent->chat($message);
             $msg = $io->ask($response->getContent());
-            dump($this->inspector->transaction());
             $this->inspector->flush();
         } while ($msg);
 

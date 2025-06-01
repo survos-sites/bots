@@ -1,7 +1,9 @@
 <?php
-
+// https://dev.to/mongodb/building-a-chatbot-with-symfony-and-mongodb-5c8g
+// BUT that uses MongoDB's vectorstore
 namespace App\Agent;
 
+use App\Entity\VectorStore;
 use Doctrine\ORM\EntityManagerInterface;
 use Inspector\Inspector;
 use NeuronAI\Agent;
@@ -24,14 +26,14 @@ use NeuronAI\Tools\Tool;
 use NeuronAI\Tools\ToolProperty;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use NeuronAI\RAG\VectorStore\MeilisearchVectorStore;
-class RappAgent extends RAG
+class SymfonyAgent extends RAG
 {
 
     public function __construct(
         #[Autowire('%env(OPENAI_API_KEY)%')] private string $openApiKey,
         #[Autowire('%env(MEILI_SERVER)%')] private string $meiliHost,
         #[Autowire('%env(MEILI_API_KEY)%')] private ?string $meilikey=null,
-//        #[Autowire('%env(VOYAGE_API_KEY)%')] private ?string $voyageKey=null,
+        #[Autowire('%env(VOYAGE_API_KEY)%')] private ?string $voyageKey=null,
         private EntityManagerInterface $entityManager,
     )
     {
@@ -46,50 +48,32 @@ class RappAgent extends RAG
 
     public function embeddings(): EmbeddingsProviderInterface
     {
-        return new OpenAIEmbeddingsProvider(
-            key: $this->openApiKey, model: 'text-embedding-3-small'
+        return new VoyageEmbeddingsProvider(
+            key: $this->voyageKey,
+            model: 'voyage-3'
         );
-//        return new OllamaEmbeddingsProvider(model: 'all-minilm');
     }
 
-//    public function embeddings(): EmbeddingsProviderInterface
-//    {
-//        return new VoyageEmbeddingsProvider(
-//            key: $this->voyageKey,
-//            model: 'voyage-3'
-//        );
-//    }
-
-    public function vectorStore(): VectorStoreInterface
+    protected function vectorStore(): VectorStoreInterface
     {
-
         return new DoctrineVectorStore(
             entityManager: $this->entityManager,
-            entityClassName: DoctrineEmbeddingEntityBase::class
-        );
-
-//        return new FileVectorStore(
-//            directory: '/tmp/x',
-//            topK: 4
-//        );
-
-            return new MeilisearchVectorStore(
-            key: $this->meilikey,
-            indexUid: 'aa_vector_products',
-            host: $this->meiliHost,
+            entityClassName: VectorStore::class
         );
     }
+//        return new MeilisearchVectorStore(
+//            key: $this->meilikey,
+//            indexUid: 'aa_vector_products',
+//            host: $this->meiliHost,
+//        );
     public function getSystemPrompt(): SystemPrompt
     {
         return new SystemPrompt(
-            background: ["You are an expert in Rappahannock Country, Virginia, and respond with data from the newspaper"],
+            background: ["You are an expert in Symfony, and have read all of the 7.3 docs"],
             steps: [
-//                "fetch the text from a URL, or ask the user to provide one.",
-                "Use the tools you have available to retrieve news stories",
-//                "Write the summary.",
             ],
             output: [
-                "include the date and a summary with the response",
+                "include code examples when relevant.  Answer in conversational style.",
             ]
         );
 
