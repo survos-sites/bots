@@ -3,6 +3,7 @@
 namespace App\Agent;
 
 use App\Dto\UrlAction;
+use App\Traits\IdentityTrait;
 use NeuronAI\Agent;
 use NeuronAI\Chat\Messages\ToolCallMessage;
 use NeuronAI\Providers\AIProviderInterface;
@@ -17,6 +18,8 @@ use Symfony\Contracts\Cache\CacheInterface;
 
 class SummarizeAgent extends Agent
 {
+    use IdentityTrait;
+
 
     public function __construct(
         #[Autowire('%env(OPENAI_API_KEY)%')] private string $openApiKey,
@@ -40,7 +43,7 @@ class SummarizeAgent extends Agent
     public function getSystemPrompt(): SystemPrompt
     {
         return new SystemPrompt(
-            background: ["You summarize news articles for children aged 10-12"],
+            background: ["You summarize articles from a url for children aged 10-12"],
             steps: [
                 "fetch the text from a URL, or ask the user to provide one.",
                 "Use the tools you have available to retrieve the content of the video.",
@@ -61,19 +64,24 @@ class SummarizeAgent extends Agent
 
     protected function tools(): array
     {
+        return [];
         return [
             Tool::make(
                 'fetch',
                 'Fetch the article',
             )->addProperty(
                 new ToolProperty(
-                    name: 'article_url',
+                    name: 'url',
                     type: 'string',
                     description: 'The path to the article.',
                     required: true
                 )
-            )->setCallable(function (string $url): string {
-                $content = $this->cache->get(md5($url), fn(CacheItem $item) => json_decode(file_get_contents($url)));
+            )->setCallable(function (string $url): ?string {
+                try {
+                    $content = $this->cache->get(md5($url), fn(CacheItem $item) => json_decode(file_get_contents($url)));
+                } catch (\Throwable $exception) {
+                    $content = "Unable to fetch $url";
+                }
                 return $content;
             })
         ];

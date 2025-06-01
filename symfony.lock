@@ -80,6 +80,9 @@
     "survos/deployment-bundle": {
         "version": "1.5.529"
     },
+    "survos/pico-bundle": {
+        "version": "dev-main"
+    },
     "symfony/asset-mapper": {
         "version": "7.3",
         "recipe": {

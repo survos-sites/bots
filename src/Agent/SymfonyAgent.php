@@ -4,6 +4,7 @@
 namespace App\Agent;
 
 use App\Entity\VectorStore;
+use App\Traits\IdentityTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Inspector\Inspector;
 use NeuronAI\Agent;
@@ -28,13 +29,14 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use NeuronAI\RAG\VectorStore\MeilisearchVectorStore;
 class SymfonyAgent extends RAG
 {
+    use IdentityTrait;
 
     public function __construct(
+        private EntityManagerInterface $entityManager,
         #[Autowire('%env(OPENAI_API_KEY)%')] private string $openApiKey,
         #[Autowire('%env(MEILI_SERVER)%')] private string $meiliHost,
         #[Autowire('%env(MEILI_API_KEY)%')] private ?string $meilikey=null,
         #[Autowire('%env(VOYAGE_API_KEY)%')] private ?string $voyageKey=null,
-        private EntityManagerInterface $entityManager,
     )
     {
     }

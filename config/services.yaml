@@ -18,3 +18,13 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+#    instanceof \NeuronAI\AgentInterface:
+#        tags: ['neuron.agent']     # same as before
+
+#    instanceof Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController:
+#        tags: ['neuron.agent']     # same as before
+
+    _instanceof:
+        \NeuronAI\AgentInterface:
+            tags: ['neuron.agent']
+            lazy: true

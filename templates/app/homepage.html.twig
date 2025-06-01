@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AppController!{% endblock %}
+
+{% block body %}
+<div class="example-wrapper">
+    <h1><a href="https://github.com/inspector-apm/neuron-ai" target="_blank">Neuron AI</a> Playground</h1>
+
+    <div>
+        This is a playground for Symfony applications built on
+    </div>
+
+    <section class="cards">
+        <!-- Card 1 -->
+        {% for agentCode, agent in agents   %}
+            <article>
+                <h3><a href="{{ path('chat_index', {agentCode: agentCode}) }}">{{ agentCode }}</a></h3>
+
+                <p>
+                    {{ agent.identity|join(" ") }}
+                </p>
+                <footer>
+                    <a href="#link1">Start chatting</a>
+                    <a href="#link2">Details</a>
+                </footer>
+            </article>
+        {% endfor %}
+    </section>
+
+
+{#    <h3>Stream test</h3>#}
+{#    <div data-controller="stream">#}
+{#        <div data-stream-target="output" style="height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 1rem;"></div>#}
+{#        <div data-stream-target="loader" style="margin-top: 0.5rem;">Loading…</div>#}
+{#    </div>#}
+
+</div>
+{% endblock %}

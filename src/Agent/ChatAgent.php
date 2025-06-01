@@ -2,6 +2,7 @@
 
 namespace App\Agent;
 
+use App\Traits\IdentityTrait;
 use NeuronAI\Agent;
 use NeuronAI\Chat\Messages\ToolCallMessage;
 use NeuronAI\Providers\AIProviderInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class ChatAgent extends Agent
 {
-
+    use IdentityTrait;
     public function __construct(
         #[Autowire('%env(OPENAI_API_KEY)%')] private string $openApiKey
     )

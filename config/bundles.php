@@ -17,4 +17,5 @@ return [
     Inspector\Symfony\Bundle\InspectorBundle::class => ['all' => true],
     Bizkit\VersioningBundle\BizkitVersioningBundle::class => ['dev' => true],
     Survos\DeploymentBundle\SurvosDeploymentBundle::class => ['dev' => true],
+    Survos\PicoBundle\SurvosPicoBundle::class => ['all' => true],
 ];

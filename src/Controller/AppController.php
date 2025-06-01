@@ -2,17 +2,26 @@
 
 namespace App\Controller;
 
+use App\Service\AgentService;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class AppController extends AbstractController
 {
-    #[Route('/', name: 'app_app')]
-    public function index(): Response
+    public function __construct(
+        private AgentService $agentService,
+    )
     {
-        return $this->render('app/index.html.twig', [
-            'agents' => ChatController::AGENTS
-        ]);
+    }
+
+    #[Route('/', name: 'app_homepage')]
+    #[Template('app/homepage.html.twig')]
+    public function index(): Response|array
+    {
+        return [
+            'agents' => $this->agentService->agentsByCode(),
+        ];
     }
 }

@@ -6,6 +6,7 @@ use App\Agent\ChatAgent;
 use App\Agent\ProductAgent;
 use App\Agent\RappAgent;
 use App\Agent\SummarizeAgent;
+use App\Service\AgentService;
 use Inspector\Inspector;
 use NeuronAI\Agent;
 use NeuronAI\Chat\Messages\UserMessage;
@@ -26,19 +27,21 @@ class ChatController extends AbstractController
         private RappAgent $rappAgent,
         private ProductAgent $productAgent,
         private SummarizeAgent $summarizeAgent,
-        private Inspector $inspector
+        private Inspector $inspector,
+        private AgentService $agentService
     ) {
 
     }
 
     private function getAgent(string $agentCode): Agent
     {
-        $agent = match ($agentCode) {
-            'chat' => $this->chatAgent,
-            'rapp' => $this->rappAgent,
-            'product' => $this->productAgent,
-            'summarize' => $this->summarizeAgent,
-        };
+        $agent =  $this->agentService->agentsByCode()[$agentCode];
+//        $agent = match ($agentCode) {
+//            'chat' => $this->chatAgent,
+//            'rapp' => $this->rappAgent,
+//            'product' => $this->productAgent,
+//            'summarize' => $this->summarizeAgent,
+//        };
         $agent->observe(new AgentMonitoring($this->inspector));
         return $agent;
     }
@@ -49,7 +52,7 @@ class ChatController extends AbstractController
         $agent = $this->getAgent($agentCode);
         return $this->render('chat/index.html.twig', [
             'agent' => $agent,
-            'agents' => self::AGENTS, // for the menu, ugh
+            'agents' => $this->agentService->agentsByCode(),
             'agentCode' => $agentCode,
         ]);
     }

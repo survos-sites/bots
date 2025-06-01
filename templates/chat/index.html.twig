@@ -1,54 +1,30 @@
-{# {% extends "base.html.twig" %} #}
+{% extends "base.html.twig" %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light dark">
-    <title>Symfony Chatbot</title>
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
-    {{ importmap('app') }}
-</head>
-<body>
+{# <aside> #}
+{#    <h3>History</h3> #}
+{#    <nav> #}
+{#        <ul> #}
+{#            <li><a href="#">🏠 Dashboard</a></li> #}
+{#            <li><a href="#">📄 Reports</a></li> #}
+{#            <li><a href="#">⚙️ Settings</a></li> #}
+{#            <li><a href="#">🔒 Logout</a></li> #}
+{#        </ul> #}
+{#    </nav> #}
+{# </aside> #}
 
+{% block body %}
+    <main class="container-fluid">
 
+        {{ agent.instructions|markdown_to_html }}
+        {% set _sc = 'chat' %}
+        <div {{ stimulus_controller(_sc, { agent: agentCode}) }}>
+            <div data-chat-target="messages"
+                 style="height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem;"></div>
+            <form data-chat-target="form" data-action="submit->chat#send">
+                <input type="text" data-chat-target="input" placeholder="Type your message..." required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}
 
-{#<aside>#}
-{#    <h3>History</h3>#}
-{#    <nav>#}
-{#        <ul>#}
-{#            <li><a href="#">🏠 Dashboard</a></li>#}
-{#            <li><a href="#">📄 Reports</a></li>#}
-{#            <li><a href="#">⚙️ Settings</a></li>#}
-{#            <li><a href="#">🔒 Logout</a></li>#}
-{#        </ul>#}
-{#    </nav>#}
-{#</aside>#}
-
-<main class="container-fluid">
-    <nav class="container-fluid">
-        <ul>
-            <li><strong>Chad</strong>-{{ agentCode }}</li>
-        </ul>
-        <ul>
-            {% for agent in agents %}
-                <li><a href="{{ path('chat_index', {agentCode: agent}) }}">{{ agent }}</a></li>
-            {% endfor %}
-            {#        <li><a href="#" role="button" class="secondary">Login</a></li> #}
-        </ul>
-    </nav>
-
-    {{ agent.instructions|markdown_to_html }}
-    {% set _sc = 'chat' %}
-    <div {{ stimulus_controller(_sc, { agent: agentCode}) }}>
-        <div data-chat-target="messages"
-             style="height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem;"></div>
-        <form data-chat-target="form" data-action="submit->chat#send">
-            <input type="text" data-chat-target="input" placeholder="Type your message..." required>
-            <button type="submit">Send</button>
-        </form>
-    </div>
-</main>
-</body>
-</html>

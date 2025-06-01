@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "000c81545d5354a59ecf97c3713cda9c",
+    "content-hash": "01ff33d6e4e8caea264fade0dca830be",
     "packages": [
         {
             "name": "composer/semver",
@@ -3132,6 +3132,62 @@
                 "source": "https://github.com/ralouphie/getallheaders/tree/develop"
             },
             "time": "2019-03-08T08:55:37+00:00"
+        },
+        {
+            "name": "survos/pico-bundle",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/pico-bundle.git",
+                "reference": "b8b50971b2c4077517f699c670f732ffe1d8c77e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/survos/pico-bundle/zipball/b8b50971b2c4077517f699c670f732ffe1d8c77e",
+                "reference": "b8b50971b2c4077517f699c670f732ffe1d8c77e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.3",
+                "symfony/config": "^6.4 || ^7.1",
+                "symfony/dependency-injection": "^6.4 || ^7.1",
+                "symfony/http-kernel": "^6.4 || ^7.1",
+                "twig/twig": "^3.4"
+            },
+            "require-dev": {
+                "symfony/browser-kit": "^6.4 || ^7.1",
+                "symfony/framework-bundle": "^6.4 || ^7.1",
+                "symfony/phpunit-bridge": "^6.4 || ^7.1",
+                "symfony/twig-bundle": "^6.4 || ^7.1",
+                "symfony/var-dumper": "^6.4 || ^7.1"
+            },
+            "default-branch": true,
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Survos\\PicoBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "pico-bundle Bundle",
+            "keywords": [
+                "symfony",
+                "symfony-ux"
+            ],
+            "support": {
+                "issues": "https://github.com/survos/pico-bundle/issues",
+                "source": "https://github.com/survos/pico-bundle/tree/main"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-06-01T11:15:27+00:00"
         },
         {
             "name": "symfony/asset",
@@ -11474,10 +11530,11 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "inspector-apm/neuron-ai": 20,
-        "survos/code-bundle": 20
+        "survos/code-bundle": 20,
+        "survos/pico-bundle": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

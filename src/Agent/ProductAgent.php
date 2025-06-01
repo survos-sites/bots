@@ -2,6 +2,7 @@
 
 namespace App\Agent;
 
+use App\Traits\IdentityTrait;
 use NeuronAI\Agent;
 use NeuronAI\Chat\Messages\ToolCallMessage;
 use NeuronAI\Providers\AIProviderInterface;
@@ -18,6 +19,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use NeuronAI\RAG\VectorStore\MeilisearchVectorStore;
 class ProductAgent extends RAG
 {
+
+    use IdentityTrait;
+
 
     public function __construct(
         #[Autowire('%env(OPENAI_API_KEY)%')] private string $openApiKey,
@@ -50,7 +54,7 @@ class ProductAgent extends RAG
     public function getSystemPrompt(): SystemPrompt
     {
         return new SystemPrompt(
-            background: ["You help us find products in the embedded product data "],
+            background: ["You find products in the embedded product data "],
 //            steps: [
 //                "fetch the text from a URL, or ask the user to provide one.",
 //                "Use the tools you have available to retrieve the content of the video.",
