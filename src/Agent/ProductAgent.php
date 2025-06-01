@@ -54,7 +54,7 @@ class ProductAgent extends RAG
     public function getSystemPrompt(): SystemPrompt
     {
         return new SystemPrompt(
-            background: ["You find products in the embedded product data "],
+            background: ["You find products in the embedded product data with comes from dummyjson.com/products"],
 //            steps: [
 //                "fetch the text from a URL, or ask the user to provide one.",
 //                "Use the tools you have available to retrieve the content of the video.",

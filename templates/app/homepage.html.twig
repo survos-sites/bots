@@ -7,7 +7,8 @@
     <h1><a href="https://github.com/inspector-apm/neuron-ai" target="_blank">Neuron AI</a> Playground</h1>
 
     <div>
-        This is a playground for Symfony applications built on
+        This is a playground for Symfony applications built on the Neuron AI Framework.
+        This is a work in progress, the RAG-related agents do not actually incorporate additional data.
     </div>
 
     <section class="cards">
@@ -20,8 +21,8 @@
                     {{ agent.identity|join(" ") }}
                 </p>
                 <footer>
-                    <a href="#link1">Start chatting</a>
-                    <a href="#link2">Details</a>
+                    <a href="{{ path('chat_index', {agentCode: agentCode}) }}">Start chatting</a>
+{#                    <a href="#link2">Details</a>#}
                 </footer>
             </article>
         {% endfor %}
@@ -35,4 +36,7 @@
 {#    </div>#}
 
 </div>
+    <footer>
+        Note: not officially affiliated with Neuron AI, just a fan.  Repo at <a href="https://github.com/survos-sites/bots" target="_blank">https://github.com/survos-sites/bots</a>
+    </footer>
 {% endblock %}
