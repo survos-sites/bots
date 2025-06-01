@@ -5,6 +5,8 @@ namespace App\Command;
 use App\Agent\SymfonyAgent;
 use App\Entity\VectorStore;
 use Doctrine\ORM\EntityManagerInterface;
+use NeuronAI\RAG\DataLoader\DocumentSplitter;
+use NeuronAI\RAG\DataLoader\FileDataLoader;
 use NeuronAI\RAG\DataLoader\StringDataLoader;
 use NeuronAI\RAG\VectorStore\Doctrine\DoctrineEmbeddingEntityBase;
 use NeuronAI\RAG\VectorStore\Doctrine\DoctrineVectorStore;
@@ -75,9 +77,11 @@ class ImportSymfonyCommand
             }
             $io->writeln(sprintf(" - %s (%d bytes)", $stat['name'], $stat['size']));
             $content = $zip->getFromIndex($i);
-            dump($this->agent->getVectorStore()::class);
-            $documents = StringDataLoader::for($content)->getDocuments();
-            $this->agent->addDocuments($documents);
+            $documents = DocumentSplitter::splitDocument(new VectorStore($content));
+            $embedded = $this->agent->embeddings()->embedDocuments($documents);
+//            $documents = StringDataLoader::for($content)->getDocuments();
+//            $this->agent->addDocuments($documents);
+            $this->agent->vectorStore()->addDocuments($embedded);
             $importCount++;
 
             if ($limit && ($importCount >= $limit)) {
