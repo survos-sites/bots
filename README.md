@@ -9,6 +9,8 @@ Get your API key and pay for it!
 
 Install Meilisearch
 
+
+
 ```bash
 echo "OPENAI_API_KEY='sk-...'" > .env.local
 bin/console ai:rapp --embed limit=2 "test"
@@ -29,3 +31,6 @@ bin/console ai:products --embed
 bin/console ai:rapp --embed
 ```
 
+git clone git@github.com:survos-sites/bots && cd bots
+composer install
+bin/console dbal:run "SELECT * FROM pg_extension;"

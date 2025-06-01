@@ -54,8 +54,21 @@ class SymfonyAgent extends RAG
         );
     }
 
-    protected function vectorStore(): VectorStoreInterface
+    public function getVectorStore(): VectorStoreInterface
     {
+        return $this->store;
+    }
+    public function vectorStore(): VectorStoreInterface
+    {
+        $dir = '/tmp/symfony';
+        if (!is_dir($dir)) {
+            mkdir($dir);
+        };
+//        return new FileVectorStore(
+//            directory: '/tmp/symfony',
+//            topK: 4
+//        );
+
         return new DoctrineVectorStore(
             entityManager: $this->entityManager,
             entityClassName: VectorStore::class

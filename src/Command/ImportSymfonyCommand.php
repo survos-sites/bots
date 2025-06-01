@@ -3,7 +3,12 @@
 namespace App\Command;
 
 use App\Agent\SymfonyAgent;
+use App\Entity\VectorStore;
+use Doctrine\ORM\EntityManagerInterface;
 use NeuronAI\RAG\DataLoader\StringDataLoader;
+use NeuronAI\RAG\VectorStore\Doctrine\DoctrineEmbeddingEntityBase;
+use NeuronAI\RAG\VectorStore\Doctrine\DoctrineVectorStore;
+use NeuronAI\RAG\VectorStore\FileVectorStore;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
@@ -15,21 +20,24 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 #[AsCommand('import:symfony', 'Import the Symfony docs')]
 class ImportSymfonyCommand
 {
-	public function __construct(
-        private SymfonyAgent $agent,
+    public function __construct(
+        private SymfonyAgent           $agent,
+        private EntityManagerInterface $entityManager,
     )
-	{
-	}
+    {
+    }
 
 
-	public function __invoke(
-		SymfonyStyle $io,
-		#[Argument('The name of the downloaded file')]
-		string $zipPath = 'data/7.3.zip',
-		#[Option('limit the number of records imported')]
-		int $limit = 50,
-	): int
-	{
+    public function __invoke(
+        SymfonyStyle $io,
+        #[Argument('The name of the downloaded file')]
+        string       $zipPath = 'data/7.3.zip',
+        #[Option('limit the number of records imported')]
+        int          $limit = 50,
+        #[Option('vector store (doctrine, file, meili)', name: 'store')]
+        string       $vectorStoreCode = 'file'
+    ): int
+    {
         $io->warning('The entityManager MUST point to a vector-enabled postgres database');
         if (!file_exists($zipPath)) {
             $io->warning('Downloading ...');
@@ -41,6 +49,18 @@ class ImportSymfonyCommand
             $io->error("Unable to open ZIP archive: $zipPath");
             return Command::FAILURE;
         }
+
+        $this->agent->setVectorStore(
+            match ($vectorStoreCode) {
+                'doctrine' => new DoctrineVectorStore(
+                    entityManager: $this->entityManager,
+                    entityClassName: VectorStore::class
+                ),
+                'file' => new FileVectorStore(
+                    directory: '/tmp',
+                    topK: 4
+                )
+            });
 
         $io->success("ZIP Archive opened: $zipPath");
 
@@ -55,12 +75,12 @@ class ImportSymfonyCommand
             }
             $io->writeln(sprintf(" - %s (%d bytes)", $stat['name'], $stat['size']));
             $content = $zip->getFromIndex($i);
+            dump($this->agent->getVectorStore()::class);
             $documents = StringDataLoader::for($content)->getDocuments();
             $this->agent->addDocuments($documents);
             $importCount++;
 
-
-            if ($limit && ($i >= $importCount)) {
+            if ($limit && ($importCount >= $limit)) {
                 break;
             }
         }
@@ -69,10 +89,10 @@ class ImportSymfonyCommand
         $progressBar->finish();
 
 
-		if ($limit) {
-		    $io->writeln("Option limit: $limit");
-		}
-		$io->success(self::class . " success.");
-		return Command::SUCCESS;
-	}
+        if ($limit) {
+            $io->writeln("Option limit: $limit");
+        }
+        $io->success(self::class . " success.");
+        return Command::SUCCESS;
+    }
 }
