@@ -11,6 +11,7 @@ use NeuronAI\RAG\DataLoader\StringDataLoader;
 use NeuronAI\RAG\VectorStore\Doctrine\DoctrineEmbeddingEntityBase;
 use NeuronAI\RAG\VectorStore\Doctrine\DoctrineVectorStore;
 use NeuronAI\RAG\VectorStore\FileVectorStore;
+use NeuronAI\RAG\VectorStore\MeilisearchVectorStore;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
@@ -25,6 +26,8 @@ class ImportSymfonyCommand
     public function __construct(
         private SymfonyAgent           $agent,
         private EntityManagerInterface $entityManager,
+        #[Autowire('%env(MEILI_SERVER)%')] private string $meiliHost,
+        #[Autowire('%env(MEILI_API_KEY)%')] private ?string $meilikey,
     )
     {
     }
@@ -37,7 +40,7 @@ class ImportSymfonyCommand
         #[Option('limit the number of records imported')]
         int          $limit = 50,
         #[Option('vector store (doctrine, file, meili)', name: 'store')]
-        string       $vectorStoreCode = 'file'
+        string       $vectorStoreCode = 'meili'
     ): int
     {
         $io->warning('The entityManager MUST point to a vector-enabled postgres database');
@@ -52,17 +55,23 @@ class ImportSymfonyCommand
             return Command::FAILURE;
         }
 
+
         $this->agent->setVectorStore(
             match ($vectorStoreCode) {
-                'doctrine' => new DoctrineVectorStore(
-                    entityManager: $this->entityManager,
-                    entityClassName: VectorStore::class
-                ),
                 'file' => new FileVectorStore(
                     directory: '/tmp',
                     topK: 4
+                ),
+                'meili' => new MeilisearchVectorStore(
+                    key: null, // $this->meilikey??null,
+                    indexUid: 'kitchen',
+                    host: $this->meiliHost,
+                    embedder: 'default',
+                    topK: 5
                 )
-            });
+            }
+        );
+//        dd($this->agent->getVectorStore()::class);
 
         $io->success("ZIP Archive opened: $zipPath");
 
@@ -77,9 +86,9 @@ class ImportSymfonyCommand
             }
             $io->writeln(sprintf(" - %s (%d bytes)", $stat['name'], $stat['size']));
             $content = $zip->getFromIndex($i);
-            $documents = DocumentSplitter::splitDocument(new VectorStore($content));
+            $documents = StringDataLoader::for($content)->getDocuments();
+            dump($this->agent->resolveEmbeddingsProvider()::class);
             $embedded = $this->agent->embeddings()->embedDocuments($documents);
-//            $documents = StringDataLoader::for($content)->getDocuments();
 //            $this->agent->addDocuments($documents);
             $this->agent->vectorStore()->addDocuments($embedded);
             $importCount++;

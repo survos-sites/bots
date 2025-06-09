@@ -10,18 +10,18 @@ use NeuronAI\Providers\OpenAI\OpenAI;
 use NeuronAI\RAG\Embeddings\EmbeddingsProviderInterface;
 use NeuronAI\RAG\Embeddings\OpenAIEmbeddingsProvider;
 use NeuronAI\RAG\RAG;
-use NeuronAI\RAG\VectorStore\MemoryVectoreStore;
+use NeuronAI\RAG\VectorStore\MemoryVectorStore;
 use NeuronAI\RAG\VectorStore\VectorStoreInterface;
 use NeuronAI\SystemPrompt;
 use NeuronAI\Tools\Tool;
 use NeuronAI\Tools\ToolProperty;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use NeuronAI\RAG\VectorStore\MeilisearchVectorStore;
+
 class ProductAgent extends RAG
 {
 
     use IdentityTrait;
-
 
     public function __construct(
         #[Autowire('%env(OPENAI_API_KEY)%')] private string $openApiKey,
@@ -39,7 +39,7 @@ class ProductAgent extends RAG
 
     protected function vectorStore(): VectorStoreInterface
     {
-        return new MemoryVectoreStore();
+        return new MemoryVectorStore();
     }
 
 //    protected function vectorStore(): VectorStoreInterface

@@ -2,6 +2,7 @@
 
 namespace App\Agent;
 
+use App\Entity\VectorStore;
 use App\Traits\IdentityTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Inspector\Inspector;
@@ -67,7 +68,7 @@ class RappAgent extends RAG
 
         return new DoctrineVectorStore(
             entityManager: $this->entityManager,
-            entityClassName: DoctrineEmbeddingEntityBase::class
+            entityClassName: VectorStore::class
         );
 
 //        return new FileVectorStore(
@@ -75,11 +76,6 @@ class RappAgent extends RAG
 //            topK: 4
 //        );
 
-        return new MeilisearchVectorStore(
-            key: $this->meilikey,
-            indexUid: 'aa_vector_products',
-            host: $this->meiliHost,
-        );
     }
     public function getSystemPrompt(): SystemPrompt
     {

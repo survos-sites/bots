@@ -58,7 +58,7 @@ class SymfonyAgent extends RAG
 
     public function getVectorStore(): VectorStoreInterface
     {
-        return $this->store;
+        return $this->vectorStore();
     }
     public function vectorStore(): VectorStoreInterface
     {
@@ -70,17 +70,13 @@ class SymfonyAgent extends RAG
 //            directory: '/tmp/symfony',
 //            topK: 4
 //        );
-
-        return new DoctrineVectorStore(
-            entityManager: $this->entityManager,
-            entityClassName: VectorStore::class
+        return new MeilisearchVectorStore(
+            key: $this->meilikey,
+            indexUid: 'kitchen',
+            embedder: 'products-openai',
+            host: $this->meiliHost,
         );
     }
-//        return new MeilisearchVectorStore(
-//            key: $this->meilikey,
-//            indexUid: 'aa_vector_products',
-//            host: $this->meiliHost,
-//        );
     public function getSystemPrompt(): SystemPrompt
     {
         return new SystemPrompt(
