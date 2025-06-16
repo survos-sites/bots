@@ -39,13 +39,14 @@ class RappCommand
         #[Option('embed the documents')] ?bool $embed=null,
         #[Option('chat (instead of answer)')] ?bool $chat=null,
         #[Option('limit the total')] int $limit = 10,
+        #[Option('number of pages')] int $pages = 10,
 
     ): int
 	{
 
         if ($embed) {
             $total = 0;
-            for ($i=1; $i<=1; $i++) {
+            for ($i=1; $i<=$pages; $i++) {
 
             $url = 'https://ff.survos.com/api/articles?page=' . $i;
             $io->title($url);
