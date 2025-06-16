@@ -11,6 +11,7 @@ use NeuronAI\RAG\DataLoader\StringDataLoader;
 use NeuronAI\RAG\VectorStore\Doctrine\DoctrineEmbeddingEntityBase;
 use NeuronAI\RAG\VectorStore\Doctrine\DoctrineVectorStore;
 use NeuronAI\RAG\VectorStore\FileVectorStore;
+use NeuronAI\RAG\VectorStore\MeilisearchVectorStore;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
@@ -25,6 +26,8 @@ class ImportSymfonyCommand
     public function __construct(
         private SymfonyAgent           $agent,
         private EntityManagerInterface $entityManager,
+        #[Autowire('%env(MEILI_SERVER)%')] private string $meiliHost,
+        #[Autowire('%env(MEILI_API_KEY)%')] private ?string $meilikey,
     )
     {
     }
@@ -78,12 +81,8 @@ class ImportSymfonyCommand
             }
             $io->writeln(sprintf(" - %s (%d bytes)", $stat['name'], $stat['size']));
             $content = $zip->getFromIndex($i);
-
-//            new VectorStore($content)
-//            $documents = DocumentSplitter::splitDocument();
             $documents = StringDataLoader::for($content)->getDocuments();
             $embedded = $this->agent->embeddings()->embedDocuments($documents);
-//            $this->agent->addDocuments($documents);
             $this->agent->resolveVectorStore()->addDocuments($embedded);
             $importCount++;
 

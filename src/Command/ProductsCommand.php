@@ -44,7 +44,7 @@ class ProductsCommand
                 $description = $product->description;
                 $description = sprintf("SKU %s is %s and can be described as %s.  It's price is %s and is a %s product.",
                 $product->sku, $product->title, $description, $product->price, $product->category);
-                $this->agent->embeddings()->embedText($description);
+                $this->agent->resolveEmbeddingsProvider()->embedText($description);
 //                $documents = StringDataLoader::for($description)->getDocuments();
 //                $this->agent->embeddings()->embedDocuments($documents);
             }

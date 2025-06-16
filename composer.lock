@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d8e73992bc8e565bb1d7b1ee53379be",
+    "content-hash": "49226d6f9a32e50f3dd285bcaaf9e62d",
     "packages": [
         {
             "name": "composer/semver",
@@ -1854,7 +1854,7 @@
             "description": "PHP AI Framework with built-in observability.",
             "support": {
                 "issues": "https://github.com/inspector-apm/neuron-ai/issues",
-                "source": "https://github.com/inspector-apm/neuron-ai/tree/develop"
+                "source": "https://github.com/inspector-apm/neuron-ai/tree/main"
             },
             "time": "2025-06-16T14:20:20+00:00"
         },
