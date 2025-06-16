@@ -38,13 +38,17 @@ class RappCommand
 		?string $msg="who are you and what are your skills?",
         #[Option('embed the documents')] ?bool $embed=null,
         #[Option('chat (instead of answer)')] ?bool $chat=null,
-        #[Option('limit the total')] int $limit = 10,
-        #[Option('number of pages')] int $pages = 10,
+//        #[Option('limit the total')] int $limit = 500,
+        #[Option('number of pages')] int $pages = 100
 
     ): int
 	{
 
         if ($embed) {
+            $templateString = "On {{ Date }} the article {{ Title }} was published at {{ url }}.
+            The article said {{ Content }}";
+            $template = $this->twig->createTemplate($templateString);
+
             $total = 0;
             for ($i=1; $i<=$pages; $i++) {
 
@@ -53,26 +57,25 @@ class RappCommand
             $key = md5($url);
             $products = $this->cache->get($key, fn(CacheItem $item) => json_decode(file_get_contents($url)));
             $progressBar = new ProgressBar($io, count($products->member));
-            $templateString = "On {{ Date }} the article {{ Title }} was published at {{ url }}.
-            The article said {{ Content }}";
-            $template = $this->twig->createTemplate($templateString);
 
             foreach ($products->member as $data) {
                 $progressBar->advance();
                 $text = $template->render((array)$data);
                 $documents = StringDataLoader::for($text)->getDocuments();
                 $this->agent->addDocuments($documents);
-                foreach ($documents as $document) {
-                    $io->writeln(substr($document->content, 0, 100));
-                }
+//                foreach ($documents as $document) {
+//                    $io->writeln(substr($document->content, 0, 100));
+//                }
                 $io->writeln($data->Date . '/' . $data->Title);
 //                $embedded = $this->agent->embeddings()->embedDocuments($documents);
 //                $this->agent->vectorStore()->addDocuments($embedded);
 //                $this->agent->vectorStore()->addDocuments($documents);
-                if ($total++ > $limit) {
-                    break;
-                }
+//                if ($total++ > $limit) {
+//                    break;
+//                }
             }
+
+
             $progressBar->finish();
             }
         }
