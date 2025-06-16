@@ -83,7 +83,7 @@ class ImportSymfonyCommand
             $content = $zip->getFromIndex($i);
             $documents = StringDataLoader::for($content)->getDocuments();
             $embedded = $this->agent->embeddings()->embedDocuments($documents);
-            $this->agent->resolveVectorStore()->addDocuments($embedded);
+            $this->agent->addDocuments($embedded);
             $importCount++;
 
             if ($limit && ($importCount >= $limit)) {
