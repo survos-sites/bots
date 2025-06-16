@@ -11,7 +11,7 @@ use NeuronAI\RAG\VectorStore\Doctrine\VectorType;
 class VectorStore extends DoctrineEmbeddingEntityBase
 {
     #[ORM\Column(type: VectorType::VECTOR, length: 1024)]
-    public ?array $embedding = null;
+    public array $embedding = [];
 
 
 }

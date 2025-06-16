@@ -32,7 +32,7 @@
         {% endif %}
     </ul>
     <ul>
-        {% for agentCode, agent in agents %}
+        {% for agentCode, agent in agents|default([]) %}
             <li><a href="{{ path('chat_index', {agentCode: agentCode}) }}">{{ agentCode }}</a></li>
         {% endfor %}
         {#        <li><a href="#" role="button" class="secondary">Login</a></li> #}

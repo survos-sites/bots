@@ -18,4 +18,6 @@ return [
     Bizkit\VersioningBundle\BizkitVersioningBundle::class => ['dev' => true],
     Survos\DeploymentBundle\SurvosDeploymentBundle::class => ['dev' => true],
     Survos\PicoBundle\SurvosPicoBundle::class => ['all' => true],
+    Survos\MeiliAdminBundle\SurvosMeiliAdminBundle::class => ['all' => true],
+    Survos\CommandBundle\SurvosCommandBundle::class => ['all' => true],
 ];

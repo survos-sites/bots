@@ -56,31 +56,30 @@ class SymfonyAgent extends RAG
         );
     }
 
-    public function getVectorStore(): VectorStoreInterface
-    {
-        return $this->store;
-    }
     public function vectorStore(): VectorStoreInterface
     {
-        $dir = '/tmp/symfony';
-        if (!is_dir($dir)) {
-            mkdir($dir);
-        };
+//        $dir = '/tmp/symfony';
+//        if (!is_dir($dir)) {
+//            mkdir($dir);
+//        };
 //        return new FileVectorStore(
 //            directory: '/tmp/symfony',
 //            topK: 4
 //        );
 
-        return new DoctrineVectorStore(
-            entityManager: $this->entityManager,
-            entityClassName: VectorStore::class
+//        return new DoctrineVectorStore(
+//            entityManager: $this->entityManager,
+//            entityClassName: VectorStore::class
+//        );
+        return new MeilisearchVectorStore(
+            key: $this->meilikey,
+            indexUid: 'bb',
+            embedder: 'my-embedder',
+            host: $this->meiliHost,
+            topK: 5
         );
     }
-//        return new MeilisearchVectorStore(
-//            key: $this->meilikey,
-//            indexUid: 'aa_vector_products',
-//            host: $this->meiliHost,
-//        );
+
     public function getSystemPrompt(): SystemPrompt
     {
         return new SystemPrompt(

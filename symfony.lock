@@ -59,6 +59,18 @@
             "config/packages/inspector.yaml"
         ]
     },
+    "php-http/discovery": {
+        "version": "1.20",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.18",
+            "ref": "f45b5dd173a27873ab19f5e3180b2f661c21de02"
+        },
+        "files": [
+            "config/packages/http_discovery.yaml"
+        ]
+    },
     "phpunit/phpunit": {
         "version": "12.1",
         "recipe": {
@@ -77,7 +89,23 @@
     "survos/code-bundle": {
         "version": "dev-main"
     },
+    "survos/command-bundle": {
+        "version": "1.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.5",
+            "ref": "2ae59ea83b8aeb1c288a149af0f594ee9ff52524"
+        },
+        "files": [
+            "config/packages/survos_command.yaml",
+            "config/routes/survos_command.yaml"
+        ]
+    },
     "survos/deployment-bundle": {
+        "version": "1.5.529"
+    },
+    "survos/meili-admin-bundle": {
         "version": "1.5.529"
     },
     "survos/pico-bundle": {

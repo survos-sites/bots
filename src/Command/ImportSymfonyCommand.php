@@ -37,10 +37,9 @@ class ImportSymfonyCommand
         #[Option('limit the number of records imported')]
         int          $limit = 50,
         #[Option('vector store (doctrine, file, meili)', name: 'store')]
-        string       $vectorStoreCode = 'file'
+        string       $vectorStoreCode = 'meili'
     ): int
     {
-        $io->warning('The entityManager MUST point to a vector-enabled postgres database');
         if (!file_exists($zipPath)) {
             $io->warning('Downloading ...');
             file_put_contents($zipPath, file_get_contents('https://github.com/symfony/symfony-docs/archive/refs/heads/7.3.zip'));
@@ -52,17 +51,19 @@ class ImportSymfonyCommand
             return Command::FAILURE;
         }
 
-        $this->agent->setVectorStore(
-            match ($vectorStoreCode) {
-                'doctrine' => new DoctrineVectorStore(
-                    entityManager: $this->entityManager,
-                    entityClassName: VectorStore::class
-                ),
-                'file' => new FileVectorStore(
-                    directory: '/tmp',
-                    topK: 4
-                )
-            });
+        $io->title(sprintf("Embeddings: %s Vectors: %s", $this->agent->resolveEmbeddingsProvider()::class, $this->agent->resolveVectorStore()::class));
+
+//        $this->agent->setVectorStore(
+//            match ($vectorStoreCode) {
+//                'doctrine' => new DoctrineVectorStore(
+//                    entityManager: $this->entityManager,
+//                    entityClassName: VectorStore::class
+//                ),
+//                'file' => new FileVectorStore(
+//                    directory: '/tmp',
+//                    topK: 4
+//                )
+//            });
 
         $io->success("ZIP Archive opened: $zipPath");
 
@@ -77,11 +78,13 @@ class ImportSymfonyCommand
             }
             $io->writeln(sprintf(" - %s (%d bytes)", $stat['name'], $stat['size']));
             $content = $zip->getFromIndex($i);
-            $documents = DocumentSplitter::splitDocument(new VectorStore($content));
+
+//            new VectorStore($content)
+//            $documents = DocumentSplitter::splitDocument();
+            $documents = StringDataLoader::for($content)->getDocuments();
             $embedded = $this->agent->embeddings()->embedDocuments($documents);
-//            $documents = StringDataLoader::for($content)->getDocuments();
 //            $this->agent->addDocuments($documents);
-            $this->agent->vectorStore()->addDocuments($embedded);
+            $this->agent->resolveVectorStore()->addDocuments($embedded);
             $importCount++;
 
             if ($limit && ($importCount >= $limit)) {
