@@ -26,57 +26,10 @@ use NeuronAI\Tools\Tool;
 use NeuronAI\Tools\ToolProperty;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use NeuronAI\RAG\VectorStore\MeilisearchVectorStore;
-class RappAgent extends RAG
+class RappAgent extends MeiliRAG
 {
     use IdentityTrait;
 
-    public function __construct(
-        private EntityManagerInterface $entityManager,
-        #[Autowire('%env(OPENAI_API_KEY)%')] private string $openApiKey,
-        #[Autowire('%env(MEILI_SERVER)%')] private string $meiliHost,
-        #[Autowire('%env(MEILI_API_KEY)%')] private ?string $meilikey=null,
-//        #[Autowire('%env(VOYAGE_API_KEY)%')] private ?string $voyageKey=null,
-    )
-    {
-    }
-
-    protected function provider(): AIProviderInterface
-    {
-        return new OpenAI($this->openApiKey,
-            'gpt-4.1-nano'
-        );
-    }
-
-    public function embeddings(): EmbeddingsProviderInterface
-    {
-        return new OpenAIEmbeddingsProvider(
-            key: $this->openApiKey, model: 'text-embedding-3-small'
-        );
-//        return new OllamaEmbeddingsProvider(model: 'all-minilm');
-    }
-
-//    public function embeddings(): EmbeddingsProviderInterface
-//    {
-//        return new VoyageEmbeddingsProvider(
-//            key: $this->voyageKey,
-//            model: 'voyage-3'
-//        );
-//    }
-
-    public function vectorStore(): VectorStoreInterface
-    {
-
-        return new DoctrineVectorStore(
-            entityManager: $this->entityManager,
-            entityClassName: VectorStore::class
-        );
-
-//        return new FileVectorStore(
-//            directory: '/tmp/x',
-//            topK: 4
-//        );
-
-    }
     public function getSystemPrompt(): SystemPrompt
     {
         return new SystemPrompt(
@@ -92,16 +45,5 @@ class RappAgent extends RAG
         );
     }
 
-    public function OPENAIembeddings(): EmbeddingsProviderInterface
-    {
-        return new OpenAIEmbeddingsProvider(
-            key: $this->openApiKey, model: 'text-embedding-3-small'
-        );
-    }
-
-    public function instructions(): string
-    {
-        return $this->getSystemPrompt()->__toString();
-    }
 
 }

@@ -82,7 +82,6 @@ class ImportSymfonyCommand
             $io->writeln(sprintf(" - %s (%d bytes)", $stat['name'], $stat['size']));
             $content = $zip->getFromIndex($i);
             $documents = StringDataLoader::for($content)->getDocuments();
-            dd($documents[0]);
 //            $embedded = $this->agent->embeddings()->embedDocuments($documents);
             $this->agent->addDocuments($documents);
             $importCount++;

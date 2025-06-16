@@ -63,7 +63,8 @@ class ChatController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $message = $data['message'] ?? '';
         $agent = $this->getAgent($agentCode);
-        $response = $agent->chat(new UserMessage($message));
+        $response = $agent->answer(new UserMessage($message));
+//        $response = $agent->chat(new UserMessage($message));
 
 //        $client = HttpClient::create();
 //        $apiKey = $_ENV['OPENAI_API_KEY'];

@@ -27,7 +27,7 @@ use NeuronAI\Tools\Tool;
 use NeuronAI\Tools\ToolProperty;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use NeuronAI\RAG\VectorStore\MeilisearchVectorStore;
-class SymfonyAgent extends RAG
+class MeiliRAG extends RAG
 {
     use IdentityTrait;
 
@@ -59,47 +59,16 @@ class SymfonyAgent extends RAG
 
     public function vectorStore(): VectorStoreInterface
     {
-//        $dir = '/tmp/symfony';
-//        if (!is_dir($dir)) {
-//            mkdir($dir);
-//        };
-//        return new FileVectorStore(
-//            directory: '/tmp/symfony',
-//            topK: 4
-//        );
-
-//        return new DoctrineVectorStore(
-//            entityManager: $this->entityManager,
-//            entityClassName: VectorStore::class
-//        );
+        $index = new \ReflectionClass(static::class)->getShortName();
         return new MeilisearchVectorStore(
             key: $this->meilikey,
-            indexUid: 'cc',
+            indexUid: $index,
             embedder: 'default',
             host: $this->meiliHost,
             topK: 5
         );
     }
 
-    public function getSystemPrompt(): SystemPrompt
-    {
-        return new SystemPrompt(
-            background: ["You are an expert in Symfony, and have read all of the 7.3 docs"],
-            steps: [
-            ],
-            output: [
-                "include code examples when relevant.  Answer in conversational style.",
-            ]
-        );
-
-    }
-
-    public function OPENAIembeddings(): EmbeddingsProviderInterface
-    {
-        return new OpenAIEmbeddingsProvider(
-            key: $this->openApiKey, model: 'text-embedding-3-small'
-        );
-    }
 
     public function instructions(): string
     {
