@@ -73,7 +73,7 @@ END;
                 $text = $template->render((array)$data);
                 $text = strip_tags($text);
                 $this->messageBus->dispatch(
-                    new EmbedMessage($text, 'rapp')
+                    new EmbedMessage($text, $data->id,  'rapp')
                 );
 //                foreach ($documents as $document) {
 //                    $io->writeln(substr($document->content, 0, 100));
