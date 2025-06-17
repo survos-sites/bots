@@ -4,7 +4,7 @@ namespace App\Message;
 
 use Symfony\Component\Messenger\Attribute\AsMessage;
 
-#[AsMessage('async')]
+//#[AsMessage('async')]
 final class EmbedMessage
 {
     /*
@@ -13,8 +13,9 @@ final class EmbedMessage
      */
 
      public function __construct(
-     public readonly string $text,
-         public readonly string $agentClass
+         public readonly string $text,
+         public readonly string $docId,
+         public readonly string $agentCode
      ) {
      }
 }
