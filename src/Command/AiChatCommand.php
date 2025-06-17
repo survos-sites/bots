@@ -27,7 +27,6 @@ use Symfony\Contracts\Service\ServiceCollectionInterface;
 class AiChatCommand
 {
 	public function __construct(
-        private ChatAgent $chatAgent,
         private Inspector $inspector,
         private AgentRegistry $agentRegistry,
 
@@ -35,12 +34,6 @@ class AiChatCommand
         private ServiceCollectionInterface $agents,
     )
 	{
-//        dd($this->agents);
-//        foreach ($this->agents->getProvidedServices() as $key => $agent) {
-//            dd($key, $agent);
-//        }
-//        return array_keys($this->agents->getProvidedServices());
-//        dd($this->agents);
 	}
 
 	public function __invoke(
@@ -65,12 +58,13 @@ class AiChatCommand
 
             // Talk to the agent requiring the structured output
             try {
+                /** @var Person $person */
                 $person = $agent
                     ->structured(
                         $structuredMessage,
                         Person::class
                     );
-                dump($person);
+                $io->writeln($person->name);
             } catch (AgentException $exception) {
                 $io->error($exception->getMessage());
                 $io->writeln(":-(");
