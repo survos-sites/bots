@@ -20,11 +20,16 @@ final class EmbedMessageHandler
 
     public function __invoke(EmbedMessage $message): void
     {
-        $agent = $this->agentRegistry->get($message->agentClass);
+        $agent = $this->agentRegistry->get($message->agentCode);
         $this->logger->info("chunking docs " . strlen($message->text));
-        $documents = StringDataLoader::for($message->text)
+        // @todo: check vector store to see if doc already exists.
+        $documents = StringDataLoader::for(
+            $message->text)
 //            ->withMaxLength(90)
             ->getDocuments();
+        foreach ($documents as $document) {
+            $document->addMetadata('docId', $message->docId);
+        }
         $this->logger->info("Adding documents " . count($documents));
         $agent->addDocuments($documents);
     }
