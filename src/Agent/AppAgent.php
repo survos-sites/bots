@@ -30,6 +30,11 @@ abstract class AppAgent extends Agent implements AppAgentInterface, AgentInterfa
         );
     }
 
+    public function answer(...$arguments)
+    {
+        return $this->chat($arguments);
+    }
+
     public function instructions(): string
     {
         return $this->getSystemPrompt()->__toString();
