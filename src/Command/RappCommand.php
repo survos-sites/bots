@@ -61,8 +61,8 @@ END;
 
             $total = 0;
             for ($i=1; $i<=$pages; $i++) {
-
-            $url = 'https://ff.survos.com/api/articles?page=' . $i;
+//                https://ff.survos.com/api/articles?page=1&itemsPerPage=30&order%5BpublishedTime%5D=desc&order%5Bbyline%5D=asc&order%5Bsection%5D=asc
+            $url = 'https://ff.survos.com/api/articles?order%5BpublishedTime%5D=desc&page=' . $i;
             $io->title($url);
             $key = md5($url);
             $products = $this->cache->get($key, fn(CacheItem $item) => json_decode(file_get_contents($url)));
