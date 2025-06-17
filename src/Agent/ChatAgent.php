@@ -2,25 +2,24 @@
 
 namespace App\Agent;
 
+use App\Dto\Person;
 use App\Traits\IdentityTrait;
 use NeuronAI\Agent;
+use NeuronAI\AgentInterface;
 use NeuronAI\Chat\Messages\ToolCallMessage;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Providers\OpenAI\OpenAI;
 use NeuronAI\SystemPrompt;
 use NeuronAI\Tools\Tool;
 use NeuronAI\Tools\ToolProperty;
+use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 
-class ChatAgent extends Agent
+#[AsTaggedItem('chat')]
+class ChatAgent extends AppAgent implements AppAgentInterface
 {
     use IdentityTrait;
-    public function __construct(
-        #[Autowire('%env(OPENAI_API_KEY)%')] private string $openApiKey
-    )
-    {
-    }
 
     protected function provider(): AIProviderInterface
     {
@@ -29,10 +28,18 @@ class ChatAgent extends Agent
         );
     }
 
+    protected function getOutputClass(): string
+    {
+        return Person::class;
+    }
+
     public function getSystemPrompt(): SystemPrompt
     {
         return new SystemPrompt(
-            background: ["You are an friend named Bob"],
+            background: [
+                "You are an friend named Bob",
+                "I am a programmer"
+            ],
 //            steps: [
 //                "Get the url of a YouTube video, or ask the user to provide one.",
 //                "Use the tools you have available to retrieve the transcription of the video.",

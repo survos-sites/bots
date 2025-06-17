@@ -17,6 +17,7 @@
         "inspector-apm/inspector-php": "^3.12.3",
         "inspector-apm/inspector-symfony": "^1.8.2",
         "inspector-apm/neuron-ai": "dev-main",
+        "jwage/phpamqplib-messenger": "^0.8.3",
         "league/commonmark": "^2.7",
         "meilisearch/meilisearch-php": "^1.15",
         "nyholm/psr7": "^1.8.2",
@@ -55,6 +56,7 @@
         "symfony/web-link": "^7.3",
         "symfony/yaml": "^7.3",
         "twig/extra-bundle": "^2.12|^3.21",
+        "twig/intl-extra": "^3.21",
         "twig/markdown-extra": "^3.21",
         "twig/twig": "^2.12|^3.21.1"
     },

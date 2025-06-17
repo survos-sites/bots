@@ -4,9 +4,11 @@ namespace App\Command;
 
 use App\Agent\ChatAgent;
 use App\Agent\RappAgent;
+use App\Message\EmbedMessage;
 use Inspector\Inspector;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\RAG\DataLoader\StringDataLoader;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -16,6 +18,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use NeuronAI\Observability\AgentMonitoring;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Environment;
 
@@ -27,6 +30,8 @@ class RappCommand
         private CacheInterface $cache,
         private Environment $twig,
         private Inspector $inspector,
+        private MessageBusInterface $messageBus,
+        private LoggerInterface $logger,
     )
 	{
 	}
@@ -45,8 +50,13 @@ class RappCommand
 	{
 
         if ($embed) {
-            $templateString = "On {{ Date }} the article {{ Title }} was published at {{ url }}.
-            The article said {{ Content }}";
+            $templateString = <<< END
+On <time datetime="{{ Date|format_date('short') }}">{{ Date|format_date }}</time>
+the Rappahannock News published an article titled '{{ Title }}'
+{{ Content|raw }}
+
+Citation: {{ url }}
+END;
             $template = $this->twig->createTemplate($templateString);
 
             $total = 0;
@@ -61,8 +71,10 @@ class RappCommand
             foreach ($products->member as $data) {
                 $progressBar->advance();
                 $text = $template->render((array)$data);
-                $documents = StringDataLoader::for($text)->getDocuments();
-                $this->agent->addDocuments($documents);
+                $text = strip_tags($text);
+                $this->messageBus->dispatch(
+                    new EmbedMessage($text, 'rapp')
+                );
 //                foreach ($documents as $document) {
 //                    $io->writeln(substr($document->content, 0, 100));
 //                }

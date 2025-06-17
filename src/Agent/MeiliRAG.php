@@ -25,43 +25,30 @@ use NeuronAI\RAG\VectorStore\VectorStoreInterface;
 use NeuronAI\SystemPrompt;
 use NeuronAI\Tools\Tool;
 use NeuronAI\Tools\ToolProperty;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use NeuronAI\RAG\VectorStore\MeilisearchVectorStore;
-class MeiliRAG extends RAG
+
+abstract class MeiliRAG extends AppRAGAgent implements AppAgentInterface
 {
     use IdentityTrait;
-
-    public function __construct(
-        private EntityManagerInterface $entityManager,
-        #[Autowire('%env(OPENAI_API_KEY)%')] private string $openApiKey,
-        #[Autowire('%env(MEILI_SERVER)%')] private string $meiliHost,
-        #[Autowire('%env(MEILI_API_KEY)%')] private ?string $meilikey=null,
-        #[Autowire('%env(VOYAGE_API_KEY)%')] private ?string $voyageKey=null,
-    )
-    {
-    }
-
-    protected function provider(): AIProviderInterface
-    {
-        return new OpenAI($this->openApiKey,
-            'gpt-4.1-nano'
-        );
-    }
-
-    public function embeddings(): EmbeddingsProviderInterface
-    {
-        return new VoyageEmbeddingsProvider(
-            key: $this->voyageKey,
-            model: 'voyage-3',
-            dimensions: 1024
-        );
-    }
+//
+//    public function __construct(
+//        private EntityManagerInterface                         $entityManager,
+//        #[Autowire('%env(OPENAI_API_KEY)%')] protected string  $openApiKey,
+//        #[Autowire('%env(MEILI_SERVER)%')] protected string    $meiliHost,
+//        #[Autowire('%env(MEILI_API_KEY)%')] protected ?string  $meiliKey = null,
+//        #[Autowire('%env(VOYAGE_API_KEY)%')] protected ?string $voyageKey = null,
+//    )
+//    {
+//        parent::__construct();
+//    }
 
     public function vectorStore(): VectorStoreInterface
     {
         $index = new \ReflectionClass(static::class)->getShortName();
         return new MeilisearchVectorStore(
-            key: $this->meilikey,
+            key: $this->meiliKey,
             indexUid: $index,
             embedder: 'default',
             host: $this->meiliHost,

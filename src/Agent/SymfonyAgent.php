@@ -25,23 +25,27 @@ use NeuronAI\RAG\VectorStore\VectorStoreInterface;
 use NeuronAI\SystemPrompt;
 use NeuronAI\Tools\Tool;
 use NeuronAI\Tools\ToolProperty;
+use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use NeuronAI\RAG\VectorStore\MeilisearchVectorStore;
-class SymfonyAgent extends RAG
+#[AsTaggedItem('symfony')]
+//#[AutoconfigureTag('app.agent')]
+class SymfonyAgent extends MeiliRAG
 {
     use IdentityTrait;
 
-    public function __construct(
-        private EntityManagerInterface $entityManager,
-        #[Autowire('%env(OPENAI_API_KEY)%')] private string $openApiKey,
-        #[Autowire('%env(MEILI_SERVER)%')] private string $meiliHost,
-        #[Autowire('%env(MEILI_API_KEY)%')] private ?string $meilikey=null,
-        #[Autowire('%env(VOYAGE_API_KEY)%')] private ?string $voyageKey=null,
-    )
-    {
-    }
+//    public function __construct(
+//        private EntityManagerInterface                       $entityManager,
+//        #[Autowire('%env(OPENAI_API_KEY)%')] private string  $openApiKey,
+//        #[Autowire('%env(MEILI_SERVER)%')] private string    $meiliHost,
+//        #[Autowire('%env(MEILI_API_KEY)%')] private ?string  $meiliKey=null,
+//        #[Autowire('%env(VOYAGE_API_KEY)%')] private ?string $voyageKey=null,
+//    )
+//    {
+//    }
 
-    protected function provider(): AIProviderInterface
+    public function provider(): AIProviderInterface
     {
         return new OpenAI($this->openApiKey,
             'gpt-4.1-nano'
@@ -73,7 +77,7 @@ class SymfonyAgent extends RAG
 //            entityClassName: VectorStore::class
 //        );
         return new MeilisearchVectorStore(
-            key: $this->meilikey,
+            key: $this->meiliKey,
             indexUid: 'cc',
             embedder: 'default',
             host: $this->meiliHost,

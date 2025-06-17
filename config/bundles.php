@@ -20,4 +20,5 @@ return [
     Survos\PicoBundle\SurvosPicoBundle::class => ['all' => true],
     Survos\MeiliAdminBundle\SurvosMeiliAdminBundle::class => ['all' => true],
     Survos\CommandBundle\SurvosCommandBundle::class => ['all' => true],
+    Jwage\PhpAmqpLibMessengerBundle\PhpAmqpLibMessengerBundle::class => ['all' => true],
 ];

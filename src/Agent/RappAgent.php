@@ -7,6 +7,7 @@ use App\Traits\IdentityTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Inspector\Inspector;
 use NeuronAI\Agent;
+use NeuronAI\AgentInterface;
 use NeuronAI\Chat\Messages\ToolCallMessage;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Providers\Ollama\Ollama;
@@ -24,8 +25,12 @@ use NeuronAI\RAG\VectorStore\VectorStoreInterface;
 use NeuronAI\SystemPrompt;
 use NeuronAI\Tools\Tool;
 use NeuronAI\Tools\ToolProperty;
+use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use NeuronAI\RAG\VectorStore\MeilisearchVectorStore;
+
+#[AsTaggedItem('rapp')]
 class RappAgent extends MeiliRAG
 {
     use IdentityTrait;
