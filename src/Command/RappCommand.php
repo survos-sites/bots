@@ -51,9 +51,9 @@ class RappCommand
 
         if ($embed) {
             $templateString = <<< END
-On <time datetime="{{ Date|format_date('short') }}">{{ Date|format_date }}</time>
-the Rappahannock News published an article titled '{{ Title }}'
-{{ Content|raw }}
+On <time datetime="{{ publishedTime|format_date('short') }}">{{ publishedTime|format_date }}</time>
+the Rappahannock News published an article titled '{{ headline }}'
+{{ content|raw }}
 
 Citation: {{ url }}
 END;
@@ -78,7 +78,7 @@ END;
 //                foreach ($documents as $document) {
 //                    $io->writeln(substr($document->content, 0, 100));
 //                }
-                $io->writeln($data->Date . '/' . $data->Title);
+                $io->writeln($data->publishedTime . '/' . $data->headline);
 //                $embedded = $this->agent->embeddings()->embedDocuments($documents);
 //                $this->agent->vectorStore()->addDocuments($embedded);
 //                $this->agent->vectorStore()->addDocuments($documents);
