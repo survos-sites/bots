@@ -29,7 +29,7 @@ abstract class AppRAGAgent extends RAG implements AppAgentInterface
     public function provider(): AIProviderInterface
     {
         return new OpenAI($this->openApiKey,
-            'gpt-4.1-nano'
+            'gpt-4.1-mini'
         );
     }
 
