@@ -93,11 +93,42 @@
             "config/routes/survos_command.yaml"
         ]
     },
+    "survos/core-bundle": {
+        "version": "2.0.71"
+    },
     "survos/deployment-bundle": {
         "version": "1.5.529"
     },
+    "survos/jsonl-bundle": {
+        "version": "2.0.71"
+    },
+    "survos/meili-bundle": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "2.0",
+            "ref": "203685352e56485cfb1d3b0fd2900e41d6bdc859"
+        },
+        "files": [
+            "config/packages/survos_meili.yaml",
+            "config/routes/survos_meili.yaml"
+        ]
+    },
     "survos/pico-bundle": {
         "version": "dev-main"
+    },
+    "symfony/ai-bundle": {
+        "version": "0.9999999",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "0.1",
+            "ref": "c8da024bc06438f321f35296ef9ed6c2235bfa33"
+        },
+        "files": [
+            "config/packages/ai.yaml"
+        ]
     },
     "symfony/asset-mapper": {
         "version": "7.3",
@@ -318,6 +349,15 @@
             "config/packages/twig.yaml",
             "templates/base.html.twig"
         ]
+    },
+    "symfony/uid": {
+        "version": "7.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "7.0",
+            "ref": "0df5844274d871b37fc3816c57a768ffc60a43a5"
+        }
     },
     "symfony/ux-turbo": {
         "version": "2.25",
